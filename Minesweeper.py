@@ -107,28 +107,31 @@ class Level:
 
     def print_table(self):
         print("Table:")
+
+
+
         for i in range(self.get_number_of_rows()):
             print(self.table[i])
-
-
-
-
-
 
         pygame.init()
         black = (0, 0, 0)
         white = (255, 255, 255)
         red = (255, 0, 0)
 
+        grey = (128, 128, 128)
         size = self.get_number_of_rows()*30, self.get_number_of_columns()*30
         screen = pygame.display.set_mode(size)
         pygame.display.set_caption("BUSCAMINAS")
-        clock = pygame.time.Clock()
 
+        font = pygame.font.Font(pygame.font.get_default_font(), 20)
+
+        clock = pygame.time.Clock()
         while True:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
+
+
 
             mouse_pos = pygame.mouse.get_pos()
             print(mouse_pos)
@@ -136,15 +139,30 @@ class Level:
             y = mouse_pos[1]
             screen.fill(white)
 
+            #Bucle para poner la cuadrícula de colores
             for x in range(0, self.get_number_of_columns()*30, 30):
                 for y in range(0, self.get_number_of_rows()*30, 30):
-                    if self.table[x][y] < 0:
+                    if self.table[int(x/30)][int(y/30)] == 9:
                         pygame.draw.rect(screen, black, (x, y, 25, 25))
                     else:
-                        pygame.draw.rect(screen, red, (x, y, 25, 25)
+                        pygame.draw.rect(screen, (x,y,150), (x, y, 25, 25))
+
+            #Bucle para poner los números
+            for x in range(0, self.get_number_of_columns()*30, 30):
+                for y in range(0, self.get_number_of_rows()*30, 30):
+                    label = font.render(str(self.table[int(x/30)][int(y/30)]), 1, (255, 255, 0))
+                    screen.blit(label, (x+7, y+4))
+
+
+            if boton['on_click']:
+                screen.blit(boton['imagen_pressed'], boton['rect'])
+            else:
+                screen.blit(boton['imagen'], boton['rect'])
+
+
 
             pygame.display.flip()
-            clock.tick(60)
+
 
 
         # ventana
